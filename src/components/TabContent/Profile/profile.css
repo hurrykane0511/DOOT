@@ -1,0 +1,61 @@
+:root{
+	--dark: #2e2e2e;
+	--gray: #878a92;
+	--darkgray: #495057;
+	--primary: #776BCC;
+	--font: 'Radio Canada', sans-serif;
+}
+
+.profile_wrap{
+	width: 100%;
+	height: 100%;
+	font-family: var(--font);
+}
+
+.profile_over_lay{
+	/* background: var(--primary); */
+	background: no-repeat center;
+	background-size: cover;
+	height: 150px;
+}
+
+.profile_avt{
+	margin: 0 auto;
+	width: 80px;
+	height: 80px;
+	overflow: hidden;
+	border-radius: 50%;
+	background: #fff;
+	margin-top: -40px;
+	/* transform: translateY(-50%); */
+	box-shadow: 0 0 0 3px #fff;
+}
+.profile_avt img{
+	height: 100%;
+	width: 100%;
+}
+.profile_nickname{
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--darkgray);
+}
+.profile_job{
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--gray);
+}
+.description_self{
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--gray);
+}
+.other_infor{
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--gray);
+}
+.other_infor.email{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

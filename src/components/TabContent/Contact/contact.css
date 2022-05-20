@@ -1,0 +1,55 @@
+:root {
+    --dark: #2e2e2e;
+    --gray: #878a92;
+    --darkgray: #495057;
+    --primary: #776BCC;
+}
+
+.contact .avatar {
+    overflow: hidden;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+.contact .avatar img{
+    width: 100%;
+}
+
+.contact .dropdown-toggle::after {
+    display: none !important;
+}
+
+.contact .dropdown-item {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.contact #dropdown-menu-align-end {
+    padding: 0 !important;
+}
+
+.contact {
+    cursor: pointer;
+}
+
+.contact .name {
+    font-size: 14px;
+    font-weight: lighter;
+}
+
+.contact .info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.contact.active {
+    background: var(--primary);
+    color: #fff !important;
+}
+
+.contact.active time {
+    color: #fff !important;
+}

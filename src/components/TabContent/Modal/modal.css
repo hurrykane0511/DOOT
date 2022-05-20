@@ -1,0 +1,58 @@
+:root {
+    --gray: #878a92;
+    --darkgray: #495057;
+    --primary: #776BCC;
+    --font: 'Radio Canada', sans-serif;
+}
+
+.modal-title__custom {
+    /* font-weight: 600; */
+    font-size: 18px;
+    color: var(--darkgray);
+}
+
+.modal-input{
+    font-size: 14px;
+    font-weight: 600;
+}
+.modal-input input, .modal-input textarea{
+    font-size: 13px;
+}
+
+.btn-close-custom{
+    background: transparent;
+    color: #776BCC !important;
+    border: none;
+}
+
+.btn-close-custom:hover{
+    text-decoration: underline;
+}
+
+.btn-invite{
+    background: var(--primary) !important;
+    color: #fff !important;
+    border: none;
+}
+.btn-invite:hover{
+    color: #fff;
+}
+
+.custom_toast{
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 99;
+}
+.custom_toast .progress-bar {
+    animation: progress 1s linear forwards;
+}
+@keyframes progress
+{
+    0%{
+        width: 0;
+    }
+    100%{
+        width: 100%;
+    }
+}

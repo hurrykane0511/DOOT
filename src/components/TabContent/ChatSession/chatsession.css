@@ -1,0 +1,80 @@
+:root {
+    --gray: #878a92;
+    --darkgray: #495057;
+    --primary: #776BCC;
+    --font: 'Radio Canada', sans-serif;
+}
+
+.tab_title {
+    color: var(--darkgray);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tab_title button {
+    background: rgba(118, 107, 204, 0.2);
+    padding: 0 !important;
+    height: 26px;
+    width: 26px;
+    line-height: 10px;
+
+}
+
+.tab_title button svg {
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.search-input input,
+.search-input button {
+    font-size: 14px;
+}
+
+.chat_info {
+    cursor: pointer;
+    position: relative;
+}
+
+.chat_info .badge {
+    right: 0;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.chat_info .avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: .25s;
+}
+
+.chat_info.active {
+    background: rgba(118, 107, 204, 0.9);
+    color: #fff;
+}
+
+.chat_info .avatar img {
+    height: 100%;
+}
+
+.chat_info .info .name {
+    font-size: 14px;
+}
+
+.status {
+    position: absolute;
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+    right: 3px;
+    bottom: 3px;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+.last_message {
+    font-size: 12px;
+}
+
