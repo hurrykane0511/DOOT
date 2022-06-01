@@ -1,38 +1,28 @@
 import { async } from '@firebase/util';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
-import React, { useContext, useEffect, useState } from 'react';
+import { collection, getDocs, onSnapshot, orderBy, query, startAt, limit, doc, startAfter } from 'firebase/firestore';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { db } from '../../firebase';
-import Chat from './Chat';
 import MyChat from './MyChat';
-import AuthContext from '../../context/auth'
+import Chat from './Chat';
 
-const MsgBody = ({ chatId, friend }) => {
-    
-    // const {user} = useContext(AuthContext)
+const MsgBody = ({ friend, user, chats }) => {
 
-    const [chats, setChats] = useState([]);
     
+  
+
     useEffect(() => {
-        const getChat = async () => {
-            const chatRef = collection(db, `chatSession/${chatId}/chat`);
-            const chatQuery = query(chatRef, orderBy('createdAt', 'desc'));
-            const chatDocs = await getDocs(chatQuery);
-            let chatArray = []
-            chatDocs.forEach(doc => {
-                chatArray.unshift(doc.data());
-            })
-            setChats(chatArray);
-            console.log(chatArray);
-        }
-        getChat();
-    }, [])
-
+        document.querySelector('.message_wraper .body').scrollTo({
+            behavior: 'smooth',
+            top: document.querySelector('.message_wraper .body').scrollHeight
+        })
+    }, [chats])
     return (
-        <div className='d-flex flex-column justify-content-end h-100 px-3 py-2'>
+        <div className='msg_container px-3 py-2' >
+        <div className="mb-auto"></div>
             {
-                chats.map(chat => chat.from == friend.uid ? <Chat /> : <MyChat />)
+                chats.map(chat => chat.from == user.uid ? <MyChat key={chat.id} chatObj={chat} user={user} /> :
+                    <Chat key={chat.id} chatObj={chat} friend={friend} />)
             }
-
         </div>
     );
 }

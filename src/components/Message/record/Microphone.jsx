@@ -1,10 +1,10 @@
 import { Button, Modal } from 'react-bootstrap';
 import useRecord from './useRecord';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';
+import { collection, doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { AuthContext } from '../../../context/auth';
+import { BsFillRecordCircleFill, BsFillStopFill } from 'react-icons/bs';
+import {IoSend} from 'react-icons/io5';
 
 const Microphone = ({ show, setShow, chatId, senderId, recieverId }) => {
 
@@ -14,9 +14,15 @@ const Microphone = ({ show, setShow, chatId, senderId, recieverId }) => {
 
     const handleSend = async () => {
 
-        const storageRef = ref(storage, `audio/${chatId}-${senderId}-${new Date().toString()}`);
-        const linkDownload = uploadBytes(storageRef, blob).then(uploadResult => { return getDownloadURL(uploadResult.ref) })
         const newChatRef = doc(collection(db, "chatSession", chatId, "chat"));
+
+        const audioRef = ref(
+            storage,
+            `audio/senderId-${new Date().getTime()}`
+          );
+
+        const snap = await uploadBytes(audioRef, blob);
+        const dlUrl = await getDownloadURL(ref(storage, snap.ref.fullPath));
 
         await setDoc(newChatRef, {
             id: newChatRef.id,
@@ -24,7 +30,8 @@ const Microphone = ({ show, setShow, chatId, senderId, recieverId }) => {
             from: senderId,
             to: recieverId,
             createdAt: Timestamp.fromDate(new Date()),
-            voiceUrl: linkDownload,
+            media: [],
+            audioURL: dlUrl
         });
 
         setShow(false);
@@ -43,11 +50,17 @@ const Microphone = ({ show, setShow, chatId, senderId, recieverId }) => {
                         <div className="text-center"><audio src={audioURL} controls /></div>
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
-                    {audioURL && <Button onClick={handleSend} disabled={isRecording}>Send</Button>}
-                    <Button onClick={startRecording} disabled={isRecording}>start</Button>
-                    <Button onClick={stopRecording} disabled={!isRecording}>Stop</Button>
+                <Modal.Footer className='justify-content-center'>
+                    {audioURL && 
+                    <IoSend onClick={handleSend} disabled={isRecording} style={{'lineHeight' : '30px', 'color': 'red'}}
+                    className='btn-voice mx-2 border-1 border-danger'  fontSize={30} />}
+                    <BsFillRecordCircleFill style={{'lineHeight' : '30px', 'color': 'red'}} className='btn-voice mx-2'
+                    fontSize={30} onClick={startRecording} disabled={isRecording}/>
+                    <BsFillStopFill onClick={stopRecording} disabled={!isRecording} style={{'lineHeight' : '30px', 'color': 'red'}} 
+                    className='btn-voice mx-2 border-1 border-danger' 
+                    fontSize={30}/>
                 </Modal.Footer>
+
             </Modal>
         </>
     );

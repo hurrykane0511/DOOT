@@ -18,7 +18,7 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
 
     const [showToast, setShowToast] = useState(false);
     const [email, setEmail] = useState('');
-    const [invatationMessage, setInvatationMessage] = useState('');
+    const [invatation, setInvatation] = useState('');
     const userRef = collection(db, 'users');
 
     const btnInvite = useRef(null);
@@ -82,9 +82,8 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
         const queryUserSnapshot = query(userRef, where('email', '==', email));
         const userDocs = await getDocs(queryUserSnapshot);
         const friend = userDocs.docs.at(0).data();
-
+        console.log(invatation);
         try {
-
             const fColRef = doc(collection(db, `/users/${friend.uid}/requestList`))
             const uColRef = doc(collection(db, `/users/${currentUser.uid}/requestSent`))
 
@@ -96,7 +95,7 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
                 },
                 sentRef: uColRef.id,
                 reqRef: fColRef.id,
-                invatation: invatationMessage,
+                invatation: invatation,
                 createdAt: Timestamp.fromDate(new Date()),
             
             })
@@ -108,12 +107,14 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
                     avtUrl: friend.avtUrl,
                 },
                 sentRef: uColRef.id,
+                invatation: invatation,
                 reqRef: fColRef.id,
                 seen: false,
                 createdAt: Timestamp.fromDate(new Date()),
    
             })
 
+            setInvatation('');
             setShowToast(true);
             setShowModal(false);
         }
@@ -123,7 +124,9 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
 
     }
 
-
+    const changeInvatation = (e) =>{
+        setInvatation(e.target.value);
+    }
 
     return (
         <>
@@ -142,7 +145,7 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
 
                     <div className="mb-3 modal-input">
                         <label htmlFor='modalInvatationMessage' className='form-label'>Invatation Message</label>
-                        <textarea id={'modalInvatationMessage'} className='form-control form-control shadow-none' onChange={(e) => setInvatationMessage(e.target.value)}
+                        <textarea id='modalInvatationMessage' className='form-control form-control shadow-none' onChange={changeInvatation}
                             placeholder='Enter Message' rows={5} />
                     </div>
 

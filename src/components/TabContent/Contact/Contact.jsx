@@ -1,5 +1,5 @@
 import { getDatabase, onValue, ref } from 'firebase/database';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Moment from 'react-moment';
 import { AuthContext } from '../../../context/auth';
@@ -13,11 +13,12 @@ import { collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 
 
-const Contact = ({ friend, setMessage }) => {
-
+const Contact = ({ friend, setMessage, selected, setSelected}) => {
+  
     const { user } = useContext(AuthContext);
     const [status, setStatus] = useState(null)
-
+    const isFirstRun = useRef(true);
+    
     useEffect(() => {
         const db = getDatabase();
 
@@ -32,16 +33,33 @@ const Contact = ({ friend, setMessage }) => {
     }, [])
 
     const handleGotoChat = async () => {
+
+        setMessage(null)
+
+        const userData = await getUser(user.uid);
+
+        const userObj = {
+            uid: userData.uid,
+            name: userData.name,
+            avtUrl: userData.avtUrl
+        }
+
         const friendobj = {
             uid: friend.thatId,
             name: friend.name,
             avtUrl: friend.avtUrl
         }
-        setMessage(<MsgWrap chatId={friend.chatId} friend={friendobj} status={status}/>);
+        
+        isFirstRun.current = true
+
+        setMessage(<MsgWrap chatId={friend.chatId} friend={friendobj} user={userObj} isFirstRun={isFirstRun}/>);
+      
+        setSelected(friend.thatId);
+       
     }
 
     return (
-        <div className='contact d-flex py-1 px-3 active' onClick={handleGotoChat}>
+        <div className={`contact d-flex py-2 px-3 ${selected == friend.thatId ? 'active' : null}`} onClick={handleGotoChat}>
 
             <div className="position-relative d-flex">
                 <div className="avatar">

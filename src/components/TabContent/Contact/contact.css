@@ -4,7 +4,9 @@
     --darkgray: #495057;
     --primary: #776BCC;
 }
-
+.contact {
+    transition: 0.25s linear;
+}
 .contact .avatar {
     overflow: hidden;
     border-radius: 50%;

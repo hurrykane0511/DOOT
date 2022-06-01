@@ -16,10 +16,11 @@ const MsgHead = ({ friend }) => {
             if (snapshot.exists()) {
                 setStatus(snapshot.val());
             }
+            
         });
-
+     
         return () => unsub();
-    }, [])
+    }, [friend])
 
     return (
         <div className='backdrop p-3'>

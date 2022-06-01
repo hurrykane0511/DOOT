@@ -11,7 +11,7 @@ import { getUser } from '../../resource/Function';
 import { Badge, DropdownButton } from 'react-bootstrap';
 import { Dropdown } from 'react-bootstrap';
 import { ref, set } from 'firebase/database';
-import { collection, doc, onSnapshot, Timestamp, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, onSnapshot, Timestamp, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import { signOut } from 'firebase/auth';
 import Profile from '../TabContent/Profile/Profile';
@@ -27,7 +27,7 @@ const SideBar = ({ setTabContent, setMessage }) => {
     const [currentUser, setUser] = useState(null);
     const navigate = useNavigate()
     const [requestQuantity, setRequestQuantity] = useState(0);
-
+    
     useEffect(() => {
         getUser(user.uid)
             .then((res) => {
@@ -40,10 +40,10 @@ const SideBar = ({ setTabContent, setMessage }) => {
 
     useEffect(() => {
         const ref = collection(db, `users/${user.uid}/requestList`);
-        const unsub = onSnapshot(ref, (docs)=>{
+        const unsub = onSnapshot(ref, (docs) => {
             setRequestQuantity(docs.docs.length);
         })
-        return ()=> unsub();
+        return () => unsub();
     }, [])
 
     const handleSignout = async () => {
@@ -54,8 +54,6 @@ const SideBar = ({ setTabContent, setMessage }) => {
 
         await signOut(auth);
 
-        set(ref(`users/${user.uid}/isOnline`), false);
-        set(ref(`users/${user.uid}/lastOnline`), Timestamp.fromDate(new Date()));
         navigate('login')
     };
 
@@ -65,9 +63,14 @@ const SideBar = ({ setTabContent, setMessage }) => {
 
     }
 
-    const handleMessagesClick = () => {
+    const handleMessagesClick = async () => {
         setActive('messages')
-        setTabContent(<ChatSession currentUser={currentUser} />)
+
+        const listFriendDoc = collection(db, 'users', currentUser.uid, 'listFriend');
+        const listFriend = await getDocs(listFriendDoc);
+        const listRoom = listFriend.docs.map(doc => doc.data().chatId);
+      
+        setTabContent(<ChatSession currentUser={currentUser} listRoom={listRoom} setMessage={setMessage}/>)
     }
 
     const handleRequestListClick = () => {
@@ -96,7 +99,7 @@ const SideBar = ({ setTabContent, setMessage }) => {
                 </li>
                 <li className={`chat-tab ${active === 'requestlist' ? 'active' : null}`} onClick={handleRequestListClick}>
                     <CgUserList />
-                    { requestQuantity ? <Badge pill bg="danger">{requestQuantity}</Badge> : null }
+                    {requestQuantity ? <Badge pill bg="danger">{requestQuantity}</Badge> : null}
                 </li>
                 <li className={`chat-tab ${active === 'contacts' ? 'active' : null}`} onClick={handleContactClick}>
                     <IoIosContacts />

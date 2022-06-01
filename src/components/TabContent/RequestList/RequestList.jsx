@@ -59,7 +59,10 @@ const RequestList = ({ currentUser }) => {
             <div className="request_list_items">
                 {
                     list.length ? list.map((elm) => <RequestFriend key={elm.sender.uid} requestInfo={elm} />)
-                        : <hr />
+                        : <div className="px-4">
+                            Request Friend is Empty
+                            <hr />
+                        </div>
                 }
 
             </div>
@@ -73,9 +76,12 @@ const RequestList = ({ currentUser }) => {
             </div>
             <div className="request_list_items">
                 {
-                    listSent.map(request =>
+                    listSent.length ? listSent.map(request =>
                         <RequestSent key={request?.receiver.uid} request={request} />
-                    )
+                    ) : <div className="px-4">
+                        Request Sent is Empty
+           
+                    </div>
                 }
             </div>
             <RequestModal showModal={showModal} setShowModal={setShowModal} currentUser={currentUser} />

@@ -35,6 +35,9 @@
 .chat_info {
     cursor: pointer;
     position: relative;
+    box-shadow: 0px 1px 5px #495057;
+    margin-bottom: 5px;
+    transition: .2s ease-in;
 }
 
 .chat_info .badge {

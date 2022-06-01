@@ -12,6 +12,8 @@ const ContactList = ({ currentUser, setMessage }) => {
 
     const [showModal, setShowModal] = useState(false);
     const [list, setList] = useState([]);
+    const [selected, setSelected] = useState(null);
+    
     useEffect(() => {
         const listRef = collection(db, 'users', currentUser.uid, 'listFriend');
         const unsub = onSnapshot(listRef, (docs) => {
@@ -44,7 +46,8 @@ const ContactList = ({ currentUser, setMessage }) => {
             </div>
             <div className="contacts">
                 {
-                    list.map(friend => <Contact key={friend.thatListID} friend={friend} setMessage={setMessage} />)
+                    list.map(friend => <Contact key={friend.thatListID} friend={friend} setMessage={setMessage}
+                    selected={selected} setSelected={setSelected} />)
                 }
             </div>
             <RequestModal showModal={showModal} setShowModal={setShowModal} currentUser={currentUser} />

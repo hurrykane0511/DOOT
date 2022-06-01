@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Moment from 'react-moment';
 import { TiTick } from 'react-icons/ti';
 import { GrFormClose } from 'react-icons/gr';
-import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { AuthContext } from '../../../context/auth';
 import { db } from '../../../firebase';
 import { getUser } from '../../../resource/Function';
@@ -20,12 +20,12 @@ const RequestFriend = ({ requestInfo }) => {
         const unsub = onValue(refb, (snapshot) => {
             if (snapshot.exists()) {
                 setStatus(snapshot.val());
-            
+
             }
         });
 
         return () => unsub();
-    }, [])
+    }, [requestInfo.sender.uid])
 
     const handleAccept = async () => {
 
@@ -34,7 +34,7 @@ const RequestFriend = ({ requestInfo }) => {
         const newChatRef = doc(collection(db, `chatSession`));
 
         const userData = await getUser(user.uid);
-  
+
         await setDoc(uFriendRef, {
             thisListID: uFriendRef.id,
             thatListID: fFriendRef.id,
@@ -54,12 +54,22 @@ const RequestFriend = ({ requestInfo }) => {
             thatId: user.uid,
             chatId: newChatRef.id
         })
-     
+
         await setDoc(newChatRef, {
-                      chatId: newChatRef.id,
-                      users: [user.uid, requestInfo.sender.uid],
-                      
-                  });
+            chatId: newChatRef.id,
+            createdAt: Timestamp.fromDate(new Date()),
+            users: [
+                {
+                    uid: requestInfo.sender.uid,
+                    name: requestInfo.sender.name,
+                    avtUrl: requestInfo.sender.avtUrl
+                },
+                {
+                    uid: userData.uid,
+                    name: userData.name,
+                    avtUrl: userData.avtUrl,
+                }],
+        });
 
         const reqRef = doc(db, 'users', user.uid, 'requestList', requestInfo.reqRef);
         const sentRef = doc(db, 'users', requestInfo.sender.uid, 'requestSent', requestInfo.sentRef);
@@ -89,12 +99,12 @@ const RequestFriend = ({ requestInfo }) => {
             </div>
             <div className="info ms-3">
                 <div className="name">{requestInfo?.sender.name}</div>
-                <div className="invatation">{requestInfo.invatation || "Can you be my friend ?"}</div>
+                <div className="invatation">{requestInfo?.invatation || "Can you be my friend ?"}</div>
                 <Moment className='request_time' fromNow date={requestInfo.createdAt.toDate()} />
             </div>
             <div className="controls">
                 <button className='btn-skip me-1' onClick={handleSkip}><GrFormClose fontSize={16} /></button>
-                <button className='btn-accept' onClick={handleAccept}><TiTick  fontSize={16}/></button>
+                <button className='btn-accept' onClick={handleAccept}><TiTick fontSize={16} /></button>
             </div>
         </div>
     );
