@@ -9,14 +9,17 @@ import { addDoc, arrayUnion, collection, doc, getDoc, increment, setDoc, Timesta
 import { AuthContext } from '../../context/auth';
 import { push, set, update } from 'firebase/database';
 import { Promise } from 'bluebird';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { IoMdClose } from 'react-icons/io';
 import { getUser } from '../../resource/Function'
+
+
 const MsgForm = ({ chatId, friend }) => {
     const { user } = useContext(AuthContext)
     const [userData, setUserData] = useState(null);
     const [showRecord, setShowRecord] = useState(false);
     const [text, setText] = useState("");
     const [imgs, setImgs] = useState([]);
+    const [previewImgs, setPreviewImgs] = useState([]);
     const chatRef = doc(db, "chatSession", chatId);
 
     useEffect(() => {
@@ -34,38 +37,28 @@ const MsgForm = ({ chatId, friend }) => {
 
         e.preventDefault();
 
-        if (!text.trim()) {
-            return
-        }
-
         setText("");
         setImgs([]);
-
-
-
-        const promises = [];
-
-        if (imgs.length) {
-            promises = [];
-
-
-
-            for (let i = 0; i < imgs.length; i++) {
-                // files.values contains all the files objects
-                const file = imgs[i];
-                const metadata = {
-                    contentType: "image/*"
-                }
-                const storageRef = ref(storage, "images/" + newChatRef.id + "/" + file.name);
-
-                promises.push(uploadBytes(storageRef, file, metadata).then(uploadResult => { return getDownloadURL(uploadResult.ref) }))
-            }
+        setPreviewImgs([]);
+        imgInputRef.current.value = null;
+        if (!text.trim() && !imgs.length) {
+            return;
         }
-
-        const photos = await Promise.all(promises);
 
         const newChatRef = doc(collection(db, "chatSession", chatId, "chat"));
 
+        const promises = [];
+        for (let i = 0; i < imgs.length; i++) {
+            // files.values contains all the files objects
+            const file = imgs[i];
+            const metadata = {
+                contentType: "image/*"
+            }
+            const storageRef = ref(storage, "images/" + newChatRef.id + "/" + file.name);
+
+            promises.push(uploadBytes(storageRef, file, metadata).then(uploadResult => { return getDownloadURL(uploadResult.ref) }))
+        }
+        const photos = await Promise.all(promises);
         await setDoc(newChatRef, {
             id: newChatRef.id,
             text,
@@ -76,8 +69,8 @@ const MsgForm = ({ chatId, friend }) => {
             audioURL: ''
         });
 
-
         const chatSnap = await getDoc(chatRef);
+
         if (chatSnap.exists()) {
             await setDoc(chatRef, {
                 text,
@@ -92,7 +85,6 @@ const MsgForm = ({ chatId, friend }) => {
             })
         }
         else {
-
             await setDoc(chatRef, {
                 chatId,
                 text,
@@ -117,26 +109,36 @@ const MsgForm = ({ chatId, friend }) => {
                 merge: true
             })
         }
-
+     
 
     };
 
-    const setImages = (f) => {
-        let files = [...f];
+    const setImages = (e) => {
 
-        [].forEach.call(files, function (file) {
-            if (/image\/.*/.test(file.type)) {
-                const img = React.createElement('img', {
-                    style: {
-                        height: '100px',
-                    },
-                    src: (URL).createObjectURL(file)
-                });
-            }
-          
+        let files = [...e.target.files];
+
+        let previewImg = files.map(file =>{
+            return URL.createObjectURL(file)
         });
-
+        
+        setPreviewImgs(previewImg);
         setImgs(files)
+       
+    }
+
+    const handleRemoveImage = (src, id) => {
+        setPreviewImgs(images => images.filter((img) => { return img != src }));
+        setImgs(images => images.filter((img, i) => { return i != id }))
+        imgInputRef.current.value = null;
+    }
+
+    const Image = ({ src, id }) => {
+        return (
+            <div className="position-relative me-4">
+                <div className="close-btn" onClick={() => handleRemoveImage(src, id)}><IoMdClose /></div>
+                <img src={src} className='rounded-3' style={{ height: 100 }} alt="" />
+            </div>
+        );
     }
 
     const focusForm = async () => {
@@ -146,17 +148,19 @@ const MsgForm = ({ chatId, friend }) => {
             merge: true
         })
     }
+    const imgInputRef = useRef(null)
     return (
-        <div className={`border-1 p-3 ${imgs.length ? 'bg-white' : null}`}>
-
+        <div className={` border-1 px-3 pb-4 pt-2 ${previewImgs.length ? 'bg-white' : null}`}>
             {
-                imgs.length ? <p className='ms-4 mt-2 text-primary'>
-
-                </p> : null
+                previewImgs.length ? <div className='preview-image px-4 py-2 d-flex'>
+                    {
+                        previewImgs.map((src, i) => <Image key={src} src={src} id={i} />)
+                    }
+                </div> : null
             }
             <form className="chat-form d-flex" onSubmit={handleSubmit} onFocus={focusForm}>
 
-                <input onChange={(e) => setImages(e.target.files)} id='input_files' type="file" accept="image/*" hidden multiple />
+                <input onInput={(e) => setImages(e)} id='input_files' type="file" accept="image/*" ref={imgInputRef} hidden multiple />
 
                 <label htmlFor='input_files' className='btn btn_chat btn_attach'><IoIosAttach fontSize={20} /></label>
                 <div onClick={handleShow} className='btn btn_chat btn_attach me-2 shadow-none'><BsMic fontSize={20} /></div>
@@ -168,7 +172,9 @@ const MsgForm = ({ chatId, friend }) => {
 
                 <button className='btn btn_send btn_chat shadow-none ms-2' type='submit' onClick={handleSubmit}><IoSend /></button>
             </form>
+
             <Microphone show={showRecord} setShow={setShowRecord} chatId={chatId} senderId={user.uid} recieverId={friend.uid} />
+
         </div>
     );
 }

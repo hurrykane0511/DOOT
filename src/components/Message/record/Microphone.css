@@ -1,0 +1,275 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:700,300);
+
+.record-area .mic__head::after {
+	content: '';
+	display: inline-block;
+}
+
+.modal-content {
+	background: transparent !important;
+	border: 0 !important;
+}
+
+.record-area .mic-svg,
+.record-area .mic,
+.record-area .mic__head::after,
+.record-area .recording,
+.record-area .round,
+.record-area .toggle-label {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+
+.record-area .frame {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	height: 400px;
+
+	margin-left: -200px;
+	border-radius: 20px;
+	box-shadow: 4px 8px 16px 0 rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	background: linear-gradient(45deg, #7b1fa2 50%, #f06292 90%);
+	color: #333;
+	font-family: 'Open Sans', Helvetica, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.record-area input#record-toggle {
+	display: none;
+}
+
+.record-area .mic-svg {
+	width: 130px;
+	height: 130px;
+	margin-top: -65px;
+	margin-left: -65px;
+}
+
+.record-area .mic-svg .circle-svg {
+	stroke: #f5f5f5;
+	stroke-width: 3;
+	fill: transparent;
+}
+
+.record-area .mic {
+	width: 85px;
+	height: 85px;
+	margin-top: -42.5px;
+	margin-left: -42.5px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	transition: all 0.3s ease;
+}
+
+.record-area .mic__head {
+	background: linear-gradient(45deg, #e0e0e0 50%, white 50%);
+	width: 25.5px;
+	width: 30px;
+	height: 63.75px;
+	border-radius: 30px;
+}
+
+.record-area .mic__head::after {
+	top: 10%;
+	background: linear-gradient(45deg, #7b1fa2 50%, #f06292 90%);
+	width: 8px;
+	height: 20px;
+	border-radius: inherit;
+	transform: translate(-50%);
+}
+
+.record-area .mic__neck {
+	background: linear-gradient(45deg, #e0e0e0 50%, white 50%);
+	width: 4.25px;
+	height: 17px;
+}
+
+.record-area .mic__leg {
+	background: linear-gradient(45deg, #e0e0e0 50%, white 50%);
+	width: 25.5px;
+	height: 4.25px;
+	border-radius: 50px;
+}
+
+.record-area .recording {
+	width: 85px;
+	height: 85px;
+	margin-top: -42.5px;
+	margin-left: -42.5px;
+	transform: scale(0.5);
+	opacity: 0;
+	transition: all 0.3s 0s ease;
+}
+
+.record-area .round {
+	background: white;
+	width: 12.75px;
+	height: 12.75px;
+	border-radius: 50%;
+	margin-top: -6.375px;
+	margin-left: -6.375px;
+	animation: recording 1s ease-in-out infinite;
+	box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.15);
+}
+
+.record-area .round:first-child {
+	left: 20%;
+}
+
+.record-area .round:nth-child(2) {
+	animation-delay: 0.15s;
+}
+
+.record-area .round:last-child {
+	left: 80%;
+	animation-delay: 0.3s;
+}
+
+.record-area .toggle-label {
+	display: inline-block;
+	width: 130px;
+	height: 130px;
+	margin-top: -65px;
+	margin-left: -65px;
+	cursor: pointer;
+}
+
+.record-area #record-toggle:checked~.mic-svg {
+	animation: spinning 3s ease-in-out infinite alternate;
+}
+
+.record-area #record-toggle:checked~.mic-svg .circle-svg {
+	stroke-dasharray: 300;
+	stroke-dashoffset: 300;
+	animation: dash 3s ease-in-out infinite alternate;
+}
+
+.record-area #record-toggle:checked~.mic {
+	transform: scale(1.128);
+	animation: gone 0.5s 0.3s ease;
+	animation-fill-mode: forwards;
+}
+
+.record-area #record-toggle:checked~.recording {
+	opacity: 1;
+	transform: scale(0.98);
+	transition-delay: 0.3s;
+}
+
+@keyframes spinning {
+	to {
+		transform: rotatez(360deg);
+	}
+}
+
+@keyframes gone {
+	to {
+		transform: scale(0.5);
+		opacity: 0;
+	}
+}
+
+@keyframes recording {
+	0% {
+		transform: translatey(0%);
+	}
+
+	30% {
+		transform: translatey(-30%);
+	}
+
+	60% {
+		transform: translatey(30%);
+	}
+
+	90% {
+		transform: translatey(0%);
+	}
+}
+
+@keyframes dash {
+	from {
+		stroke-dashoffset: 300;
+	}
+
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+
+
+.play {
+	background: rgba(118, 107, 204, 0.9);
+	color: white;
+	border: none;
+	width: 80px;
+	height: 80px;
+
+	font-size: 40px;
+	border-radius: 100%;
+	outline: none;
+	text-transform: uppercase;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.play:hover {
+	background: rgba(106, 93, 202, 0.9);
+}
+
+
+
+input[type="range"] {
+	background: linear-gradient(to right, #6a5dcae6 0%, #6a5dcae6 50%, #fff 50%, #fff 100%);
+	border: solid 1px #fff;
+	border-radius: 8px;
+	height: 7px;
+	outline: none;
+	transition: background 450ms ease-in;
+	-webkit-appearance: none;
+}
+input[type='range']::-webkit-slider-thumb {
+	width: 20px;
+	-webkit-appearance: none;
+	height: 20px;
+	border-radius: 50%;
+	background: #6a5dca;
+	cursor: pointer;
+}
+
+.btn-send{
+
+	background: #6a5dca !important;
+}
+.btn-record{
+	color: #6a5dca !important;
+}
+
+.waveform{
+	max-width: 500px;
+	width: 100%;
+}
+
+.btn-play{
+	background: rgba(118, 107, 204, 0.9);
+	color: white;
+	border: none;
+	width: 40px;
+	height: 40px;
+	font-size: 20px;
+	border-radius: 100%;
+	outline: none;
+	text-transform: uppercase;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

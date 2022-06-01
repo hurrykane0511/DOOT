@@ -3,12 +3,13 @@ import useRecord from './useRecord';
 import { collection, doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { BsFillRecordCircleFill, BsFillStopFill } from 'react-icons/bs';
-import {IoSend} from 'react-icons/io5';
+import './Microphone.css';
+import Waveform from "./Waveform";
+
 
 const Microphone = ({ show, setShow, chatId, senderId, recieverId }) => {
 
-    let [audioURL, isRecording, startRecording, stopRecording, blob] = useRecord();
+    let [audioURL, setAudioURL, startRecording, stopRecording, blob] = useRecord();
 
     const handleClose = () => setShow(false);
 
@@ -19,7 +20,7 @@ const Microphone = ({ show, setShow, chatId, senderId, recieverId }) => {
         const audioRef = ref(
             storage,
             `audio/senderId-${new Date().getTime()}`
-          );
+        );
 
         const snap = await uploadBytes(audioRef, blob);
         const dlUrl = await getDownloadURL(ref(storage, snap.ref.fullPath));
@@ -37,32 +38,46 @@ const Microphone = ({ show, setShow, chatId, senderId, recieverId }) => {
         setShow(false);
     }
 
+    const handleRecord = (e) => {
+        if (e.target.checked) {
+            startRecording()
+        }
+        else {
+            stopRecording()
+        }
+    }
+
     return (
-        <>
-            <Modal centered show={show} onHide={handleClose}>
 
-                <Modal.Header closeButton>
-                    <Modal.Title>Record</Modal.Title>
-                </Modal.Header>
+        <Modal centered show={show} className='record-area' onHide={handleClose}>
 
-                <Modal.Body>
-                    <div>
-                        <div className="text-center"><audio src={audioURL} controls /></div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer className='justify-content-center'>
-                    {audioURL && 
-                    <IoSend onClick={handleSend} disabled={isRecording} style={{'lineHeight' : '30px', 'color': 'red'}}
-                    className='btn-voice mx-2 border-1 border-danger'  fontSize={30} />}
-                    <BsFillRecordCircleFill style={{'lineHeight' : '30px', 'color': 'red'}} className='btn-voice mx-2'
-                    fontSize={30} onClick={startRecording} disabled={isRecording}/>
-                    <BsFillStopFill onClick={stopRecording} disabled={!isRecording} style={{'lineHeight' : '30px', 'color': 'red'}} 
-                    className='btn-voice mx-2 border-1 border-danger' 
-                    fontSize={30}/>
-                </Modal.Footer>
+            {audioURL ? <Waveform url={audioURL} handleSend={handleSend} setAudioURL={setAudioURL} isChat={false}/> : null}
 
-            </Modal>
-        </>
+            {
+                !audioURL ?
+                    <div className="frame" hidden={false}>
+
+                        <input type="checkbox" name="toggle" id="record-toggle" onChange={handleRecord} />
+
+                        <svg viewBox="0 0 100 100" className='mic-svg'>
+                            <circle cx="50%" cy="50%" r={45} className="circle-svg" />
+                        </svg>
+                        <div className="mic">
+                            <div className="mic__head" />
+                            <div className="mic__neck" />
+                            <div className="mic__leg" />
+                        </div>
+                        <div className="recording">
+                            <div className="round" />
+                            <div className="round" />
+                            <div className="round" />
+                        </div>
+                        <label htmlFor="record-toggle" className="toggle-label" />
+                    </div> : null
+            }
+
+        </Modal>
+
     );
 }
 

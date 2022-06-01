@@ -46,7 +46,7 @@ const useRecord = () => {
         setIsRecording(false);
     };
 
-    return [audioURL, isRecording, startRecording, stopRecording, blob];
+    return [audioURL, setAudioURL, startRecording, stopRecording, blob];
 
 };
 
