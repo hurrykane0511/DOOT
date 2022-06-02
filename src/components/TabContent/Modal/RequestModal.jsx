@@ -49,8 +49,10 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
                         const list = await getDocs(q1);
 
                         if (!list.docs.length) {
-                          
                             addEvent();
+                        }
+                        else{
+                            clearEvent();
                         }
                     }
                 }
@@ -72,7 +74,6 @@ const RequestModal = ({ showModal, setShowModal, currentUser }) => {
         if (btnInvite.current) {
             btnInvite.current.disabled = true
             btnInvite.current.removeEventListener("click", handleSendRequest)
-
         }
     }
 
