@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc,setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 
@@ -25,4 +25,18 @@ async function getUser(uid) {
     const userDoc = await getDoc(ref);
     return userDoc.data();
 }
-export { CustomError, getUser }
+
+const updateProfle = async (uid, user) =>{
+    const userRef = doc(db, 'users', uid);
+    await setDoc(userRef, {
+        name: user.name,
+        avtUrl: user.avtUrl,
+    }, {
+        merge: true
+    })
+}
+
+const updateFriendInList = async (uid, friend) => {
+
+}
+export { CustomError, getUser, updateProfle }

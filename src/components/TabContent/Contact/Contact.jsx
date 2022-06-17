@@ -17,6 +17,7 @@ const Contact = ({ friend, setMessage, selected, setSelected}) => {
   
     const { user } = useContext(AuthContext);
     const [status, setStatus] = useState(null)
+    
     const isFirstRun = useRef(true);
     
     useEffect(() => {
@@ -31,6 +32,10 @@ const Contact = ({ friend, setMessage, selected, setSelected}) => {
 
         return () => unsub();
     }, [])
+
+    useEffect(()=>{
+        
+    },[])
 
     const handleGotoChat = async () => {
 

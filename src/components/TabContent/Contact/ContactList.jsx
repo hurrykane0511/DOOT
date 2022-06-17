@@ -15,6 +15,7 @@ const ContactList = ({ currentUser, setMessage }) => {
     const [selected, setSelected] = useState(null);
     
     useEffect(() => {
+        
         const listRef = collection(db, 'users', currentUser.uid, 'listFriend');
         const unsub = onSnapshot(listRef, (docs) => {
             let arrContacts = [];
