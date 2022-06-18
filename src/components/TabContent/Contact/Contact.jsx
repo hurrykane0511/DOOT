@@ -9,15 +9,12 @@ import { AiOutlineUserDelete } from 'react-icons/ai';
 import { MdBlock } from 'react-icons/md';
 import MsgWrap from '../../Message/MsgWrap';
 import { getUser } from '../../../resource/Function';
-import { collection, doc, setDoc } from 'firebase/firestore';
-import { db } from '../../../firebase';
 
 
 const Contact = ({ friend, setMessage, selected, setSelected}) => {
   
     const { user } = useContext(AuthContext);
     const [status, setStatus] = useState(null)
-    
     const isFirstRun = useRef(true);
     
     useEffect(() => {
@@ -33,9 +30,7 @@ const Contact = ({ friend, setMessage, selected, setSelected}) => {
         return () => unsub();
     }, [])
 
-    useEffect(()=>{
-        
-    },[])
+    
 
     const handleGotoChat = async () => {
 
@@ -68,7 +63,7 @@ const Contact = ({ friend, setMessage, selected, setSelected}) => {
 
             <div className="position-relative d-flex">
                 <div className="avatar">
-                    <img src={friend.avtUrl} alt="" />
+                    <img src={friend.avtUrl || 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'} alt="" />
                 </div>
                 <div className={`status ${status?.connections ? 'bg-success' : 'bg-danger'}`}></div>
 

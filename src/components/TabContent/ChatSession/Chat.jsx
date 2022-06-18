@@ -68,7 +68,7 @@ const Chat = ({ chatInfo, setMessage, setSelected, selected }) => {
         <div className={`chat_info d-flex py-2 px-3 align-items-center ${selected == chatInfo.chatId ? 'active' : null}`} onClick={handleGotoChat}>
             <div className="position-relative" >
                 <div className="avatar">
-                    <img src={friend?.avtUrl ? friend.avtUrl : 'https://cachtrongrausach.vn/this-page-isn-t-working/imager_2_16115_700.jpg'} alt="" />
+                    <img src={friend?.avtUrl ? friend.avtUrl : 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'} alt="" />
                 </div>
                 <div className={`status ${status?.connections ? 'bg-success' : 'bg-danger'}`} ></div>
             </div>

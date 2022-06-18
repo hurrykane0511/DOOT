@@ -38,7 +38,7 @@ const RequestSent = ({ request }) => {
         <div className='request_info d-flex py-4 px-3 active'>
             <div className="position-relative d-flex">
                 <div className="avatar">
-                    <img src={request?.receiver.avtUrl} alt="" />
+                    <img src={request?.receiver.avtUrl || 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'} alt="" />
                 </div>
                 <div className={`status ${status?.connections ? 'bg-success' : 'bg-danger'}`}></div>
 

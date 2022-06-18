@@ -28,7 +28,7 @@ const RegisterPage = () => {
                 uid: result.user.uid,
                 name,
                 email,
-                avtUrl: null,
+                avtUrl: 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png',
                 createdAt: Timestamp.fromDate(new Date()),
             });
 

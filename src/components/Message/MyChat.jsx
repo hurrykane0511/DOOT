@@ -25,7 +25,7 @@ const MyChat = ({ chatObj, user }) => {
             </div>
             <div className="chat_avatar mt-auto mb-5">
                 <div className="img-wrap overflow-hidden rounded-pill">
-                    <img src={user?.avtUrl || null} alt="" />
+                    <img src={user?.avtUrl || 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'} alt="" />
                 </div>
             </div>
         </div>

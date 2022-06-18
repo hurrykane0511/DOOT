@@ -26,7 +26,7 @@ const Chat = ({ chatObj, friend  }) => {
         <div className='chat_ctn'>
             <div className="chat_avatar mt-auto mb-4">
                 <div className="img-wrap overflow-hidden rounded-pill">
-                    <img src={friend?.avtUrl || null} alt="" />
+                    <img src={friend?.avtUrl || 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'} alt="" />
                 </div>
                 {stt?.connections ? <div className="status_dot bg-success"></div> : <div className="status_dot bg-danger"></div>}
             </div>

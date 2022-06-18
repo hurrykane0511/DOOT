@@ -23,9 +23,10 @@ const LoginForm = () => {
         try {
             const result = await signInWithPopup(auth, provider);
             const userData = getUser(result.user.uid)
+
             await setDoc(doc(db, "users", result.user.uid), {
                 uid: result.user.uid,
-                name: userData?.name || result.user.displayName,
+                name: userData?.name || result.user.displayName ||  result.user.uid,
                 email: userData?.email || result.user.email,
                 avtUrl: userData?.avtUrl || result.user.photoURL,
                 createdAt: userData?.createdAt || Timestamp.fromDate(new Date()),

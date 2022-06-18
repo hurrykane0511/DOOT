@@ -92,7 +92,7 @@ const RequestFriend = ({ requestInfo }) => {
         <div className='request_info d-flex py-4 px-3 active'>
             <div className="position-relative d-flex">
                 <div className="avatar">
-                    <img src={requestInfo?.sender.avtUrl} alt="" />
+                    <img src={requestInfo?.sender.avtUrl || 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'} alt="" />
                 </div>
                 <div className={`status ${status?.connections ? 'bg-success' : 'bg-danger'}`}></div>
 

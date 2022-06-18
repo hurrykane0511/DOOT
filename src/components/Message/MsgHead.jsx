@@ -33,7 +33,7 @@ const MsgHead = ({ friend }) => {
                 <div className="msg_info d-flex align-items-center">
                     <div className="msg_avatar">
                         <div className="img-wrap overflow-hidden rounded-pill">
-                            <img src={friend.avtUrl} alt="" />
+                            <img src={friend.avtUrl || 'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'} alt="" />
                         </div>
                         {status?.connections ? <div className="status_dot bg-success"></div> : <div className="status_dot bg-danger"></div>}
                     </div>
